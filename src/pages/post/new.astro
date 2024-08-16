@@ -1,0 +1,59 @@
+---
+import { verifyToken } from '../../lib/auth'
+
+let error = null
+let user = null
+
+function handlePostSubmit(event) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const title = formData.get('title').toString()
+    const content = formData.get('content').toString()
+    const tags = formData.get('tags').toString().split(',').map(tag => tag.trim())
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+        error = 'You must be logged in to create a post.'
+        return
+    }
+
+    try {
+        user = verifyToken(token)
+    } catch (err) {
+        error = 'Invalid token. Please log in again.'
+        return
+    }
+
+    fetch('/api/post/create', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ title, content, tags, author: user.username })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            error = data.error
+        } else {
+            window.location.href = `/post/${data.id}`
+        }
+    })
+    .catch(err => {
+        error = 'An error occurred while creating your post.'
+    })
+}
+---
+<html>
+  <body>
+    <h1>Create New Post</h1>
+    {error && <p style="color: red">{error}</p>}
+    <form onSubmit={handlePostSubmit}>
+      <input type="text" name="title" placeholder="Title" required />
+      <textarea name="content" placeholder="Content" required></textarea>
+      <input type="text" name="tags" placeholder="Tags (comma separated)" />
+      <button type="submit">Create Post</button>
+    </form>
+  </body>
+</html>

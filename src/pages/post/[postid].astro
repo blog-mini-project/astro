@@ -1,9 +1,53 @@
 ---
 import { getPost } from '../../lib/posts'
 import { getComments } from '../../lib/comments'
+import { verifyToken } from '../../lib/auth'
+
 const { postid } = Astro.params
 const post = await getPost(Number(postid))
-const comments = await getComments(Number(postid))
+const comments = await getComments(postid)
+
+let error = null
+let user = null
+
+function handleCommentSubmit(event) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const content = formData.get('content').toString()
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+        error = 'You must be logged in to comment.'
+        return
+    }
+
+    try {
+        user = verifyToken(token)
+    } catch (err) {
+        error = 'Invalid token. Please log in again.'
+        return
+    }
+
+    fetch(`/api/post/${postid}/comment`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ content, author: user.username })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            error = data.error
+        } else {
+            htmx.trigger(htmx.find('#comments'), 'refresh')
+        }
+    })
+    .catch(err => {
+        error = 'An error occurred while posting your comment.'
+    })
+}
 ---
 <html>
   <body>
@@ -12,12 +56,15 @@ const comments = await getComments(Number(postid))
     <p>Author: <a href={`/author/${post.author}`}>{post.author}</a></p>
     <p>Published: {post.published}</p>
     <h2>Comments</h2>
-    <ul>
-      {comments.map(comment => (
-        <li>{comment.content} - {comment.author}</li>
-      ))}
-    </ul>
-    <form method="post" action={`/post/${postid}/comment`}>
+    <div id="comments" hx-get={`/api/post/${postid}/comments`} hx-trigger="refresh">
+      <ul>
+        {comments.map(comment => (
+          <li>{comment.content} - {comment.author}</li>
+        ))}
+      </ul>
+    </div>
+    {error && <p style="color: red;">{error}</p>}
+    <form onSubmit={handleCommentSubmit}>
       <textarea name="content" placeholder="Add a comment"></textarea>
       <button type="submit">Submit</button>
     </form>

@@ -1,0 +1,34 @@
+---
+import { register } from '../lib/auth'
+
+let error = null
+
+async function handleSubmit(event) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const username = formData.get('username').toString()
+    const password = formData.get('password').toString()
+    const displayname = formData.get('displayname').toString()
+    const profilepic = formData.get('profilepic').toString()
+
+    try {
+        await register(username, password, displayname, profilepic)
+        window.location.href = '/login'
+    } catch (err) {
+        error = err.message
+    }
+}
+---
+<html>
+  <body>
+    <h1>Sign Up</h1>
+    {error && <p style="color: red;">{error}</p>}
+    <form onSubmit={handleSubmit}>
+      <input type="text" name="username" placeholder="Username" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <input type="text" name="displayname" placeholder="Display Name" />
+      <input type="text" name="profilepic" placeholder="Profile Picture URL" />
+      <button type="submit">Sign Up</button>
+    </form>
+  </body>
+</html>

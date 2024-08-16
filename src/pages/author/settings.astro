@@ -1,0 +1,61 @@
+---
+import { verifyToken } from '../../lib/auth'
+import { getAuthor } from '../../lib/authors'
+
+let error = null
+let user = null
+
+const token = localStorage.getItem('token')
+
+if (token) {
+    try {
+        user = verifyToken(token)
+    } catch (err) {
+        error = 'Invalid token. Please log in again.'
+    }
+} else {
+    error = 'You must be logged in to update your profile.'
+}
+
+const author = user ? await getAuthor(user.username) : null
+
+function handleProfileUpdate(event) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const displayname = formData.get('displayname').toString()
+    const profilepic = formData.get('profilepic').toString()
+
+    fetch('/api/user/update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ displayname, profilepic })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            error = data.error
+        } else {
+            window.location.href = `/author/${user.username}`
+        }
+    })
+    .catch(err => {
+        error = 'An error occurred while updating your profile.'
+    })
+}
+---
+<html>
+  <body>
+    <h1>Profile Settings</h1>
+    {error && <p style="color: red">{error}</p>}
+    {author && (
+      <form onSubmit={handleProfileUpdate}>
+        <input type="text" name="displayname" placeholder="Display Name" value={author.displayname} required />
+        <input type="text" name="profilepic" placeholder="Profile Picture URL" value={author.profilepic} />
+        <button type="submit">Update Profile</button>
+      </form>
+    )}
+  </body>
+</html>

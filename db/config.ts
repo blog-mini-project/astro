@@ -3,6 +3,7 @@ import { column, defineDb, defineTable, NOW } from "astro:db"
 const Author = defineTable({
     columns: {
         username: column.text({ primaryKey: true }),
+        password: column.text(),
         displayname: column.text({ optional: true }),
         profilepic: column.text({ optional: true }),
         myupvotes: column.json({ default: {} }),

@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@astrojs/db": "^0.13.1",
-    "astro": "^4.14.2"
+    "astro": "^4.14.2",
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2"
   }
 }
