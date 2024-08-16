@@ -1,0 +1,20 @@
+---
+import { getAuthor, getAuthorPosts } from '../../lib/authors'
+const { username } = Astro.params
+const author = await getAuthor(username)
+const posts = await getAuthorPosts(username)
+---
+<html>
+  <body>
+    <h1>{author.displayname}</h1>
+    <img src={author.profilepic} alt="Profile Picture" />
+    <h2>Posts</h2>
+    <ul>
+      {posts.map(post => (
+        <li>
+          <a href={`/post/${post.id}`}>{post.title}</a>
+        </li>
+      ))}
+    </ul>
+  </body>
+</html>
