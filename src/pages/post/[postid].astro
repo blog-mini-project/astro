@@ -1,7 +1,6 @@
 ---
 import { getPost } from '../../lib/posts'
 import { getComments } from '../../lib/comments'
-import { verifyToken } from '../../lib/auth'
 
 const { postid } = Astro.params
 const post = await getPost(Number(postid))
@@ -22,7 +21,6 @@ function handleCommentSubmit(event) {
     }
 
     try {
-        user = verifyToken(token)
     } catch (err) {
         error = 'Invalid token. Please log in again.'
         return
