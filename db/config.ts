@@ -67,11 +67,31 @@ const Comment = defineTable({
     ]
 })
 
-export default defineDb({
+const Session = defineTable({
+    columns: {
+        id: column.text({ primaryKey: true }),
+        user_id: column.text(),
+        expires_at: column.date(),
+    },
+    foreignKeys: [
+        {
+            columns: ["user_id"],
+            references: () => [Author.columns.username],
+        },
+    ],
+    indexes: [
+        { on: ["user_id"], unique: false }
+    ]
+})
+
+const dbConfig = defineDb({
     tables: {
         Comment,
         Author,
         Post,
         Tag,
+        Session,
     },
 })
+
+export default dbConfig

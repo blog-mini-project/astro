@@ -1,43 +1,33 @@
-import { db, Author, sql } from 'astro:db'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
+import { AstroDBAdapter } from './db'
+import dbConfig from '../../db/config'
+import { Lucia } from 'lucia'
 
-const SECRET_KEY = 'supersecretkey'
+const db = dbConfig
+const sessionTable = db.tables.Session
+const userTable = db.tables.Author
 
-export async function register(username: string, password: string, displayname?: string, profilepic?: string) {
-    const hashedPassword = await bcrypt.hash(password, 10)
-    const newUser = await db.insert(Author).values({
-        username,
-        displayname,
-        profilepic,
-        password: hashedPassword,
-        karma: 0,
-        myupvotes: {},
-        mydownvotes: {},
-        posts: {},
-        comments: {},
-    })
-    return newUser
-}
+const adapter = new AstroDBAdapter(db, sessionTable, userTable)
 
-export async function login(username: string, password: string) {
-    const user = await db.select().from(Author).where(sql`username = ${username}`).first()
-    if (!user) {
-        throw new Error('User not found')
+const lucia = new Lucia(adapter, {
+    sessionCookie: {
+        attributes: {
+            secure: process.env.NODE_ENV === 'production'
+        }
+    },
+    getUserAttributes: (attributes) => {
+        return {
+            displayname: attributes.displayname,
+            profilepic: attributes.profilepic,
+            karma: attributes.karma,
+        }
     }
-    const isPasswordValid = await bcrypt.compare(password, user.password)
-    if (!isPasswordValid) {
-        throw new Error('Invalid password')
-    }
-    const token = jwt.sign({ username: user.username }, SECRET_KEY, { expiresIn: '1h' })
-    return { token, user }
-}
+})
 
-export function verifyToken(token: string) {
-    try {
-        const decoded = jwt.verify(token, SECRET_KEY)
-        return decoded
-    } catch (error) {
-        throw new Error('Invalid token')
+declare module 'lucia' {
+    interface Register {
+        Lucia: typeof lucia
+        DatabaseUserAttributes: Omit<ReturnType<typeof adapter.getUser>['attributes'], 'id'>
     }
 }
+
+export { lucia }
