@@ -1,3 +1,5 @@
+export const prerender = false
+
 // import type { APIRoute } from 'astro'
 // import { db, Author, sql } from 'astro:db'
 // import { verifyToken } from '../../../lib/auth'

@@ -1,3 +1,5 @@
+export const prerender = false
+
 // import type { APIRoute } from 'astro'
 // import { addComment } from '../../../../lib/comments'
 // import { verifyToken } from '../../../../lib/auth'
