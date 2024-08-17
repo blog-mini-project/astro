@@ -1,6 +1,6 @@
 import { column, defineDb, defineTable, NOW } from "astro:db"
 
-const Author = defineTable({
+export const Author = defineTable({
     columns: {
         username: column.text({ primaryKey: true }),
         password: column.text(),
@@ -17,7 +17,7 @@ const Author = defineTable({
     ]
 })
 
-const Post = defineTable({
+export const Post = defineTable({
     columns: {
         id: column.number({ primaryKey: true }),
         title: column.text(),
@@ -39,14 +39,14 @@ const Post = defineTable({
     ]
 })
 
-const Tag = defineTable({
+export const Tag = defineTable({
     columns: {
         id: column.number({ primaryKey: true }),
         name: column.text({ unique: true }),
     },
 })
 
-const Comment = defineTable({
+export const Comment = defineTable({
     columns: {
         id: column.number({ primaryKey: true }),
         author: column.text(),
@@ -58,8 +58,12 @@ const Comment = defineTable({
     },
     foreignKeys: [
         {
-            columns: ["author", "postid"],
-            references: () => [Author.columns.username, Post.columns.id],
+            columns: ["author"],
+            references: () => [Author.columns.username],
+        },
+        {
+            columns: ["postid"],
+            references: () => [Post.columns.id],
         },
     ],
     indexes: [
@@ -67,20 +71,20 @@ const Comment = defineTable({
     ]
 })
 
-const Session = defineTable({
+export const Session = defineTable({
     columns: {
         id: column.text({ primaryKey: true }),
-        user_id: column.text(),
-        expires_at: column.date(),
+        username: column.text(),
+        expires_at: column.number(),
     },
     foreignKeys: [
         {
-            columns: ["user_id"],
+            columns: ["username"],
             references: () => [Author.columns.username],
         },
     ],
     indexes: [
-        { on: ["user_id"], unique: false }
+        { on: ["username"], unique: false }
     ]
 })
 

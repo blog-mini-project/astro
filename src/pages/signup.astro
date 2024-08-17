@@ -1,58 +1,42 @@
 ---
-import { register as serverRegister } from '../lib/auth'
+
 ---
 
 <html>
   <body>
     <h1>Sign Up</h1>
-    <form id="signup-form">
-      <input type="text" name="username" placeholder="Username" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <input type="text" name="displayname" placeholder="Display Name" />
-      <input type="text" name="profilepic" placeholder="Profile Picture URL" />
-      <button type="submit">Sign Up</button>
-    </form>
+    <div>
+      <input type="text" id="signupUsername" name="username" placeholder="Username" required />
+      <input type="password" id="signupPassword" name="password" placeholder="Password" required />
+      <input type="text" id="signupDisplayName" name="displayname" placeholder="Display Name" />
+      <input type="text" id="signupProfilePic" name="profilepic" placeholder="Profile Picture URL" />
+      <button id="signupButton">Sign Up</button>
+    </div>
     <script>
-      let error = null
-
-      async function register(username, password, displayname, profilepic) {
-        const requestBody = JSON.stringify({ username, password, displayname, profilepic })
-
-        const response = await fetch('/api/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: requestBody
-        })
-        console.log(requestBody)
-        const responseText = await response.text()
-        console.log('Response Text:', responseText)
-
-        if (!response.ok) {
-          const errorData = JSON.parse(responseText)
-          throw new Error(errorData.message)
-        }
-      }
-
-      async function handleSubmit(event) {
+      document.getElementById('signupButton').addEventListener('click', async (event) => {
         event.preventDefault()
-        const formData = new FormData(event.target)
-        const username = formData.get('username').toString()
-        const password = formData.get('password').toString()
-        const displayname = formData.get('displayname')?.toString()
-        const profilepic = formData.get('profilepic')?.toString()
+        const username = (document.getElementById("signupUsername") as HTMLInputElement).value
+        const password = (document.getElementById("signupPassword") as HTMLInputElement).value
+        const displayname = (document.getElementById("signupDisplayName") as HTMLInputElement).value
+        const profilepic = (document.getElementById("signupProfilePic") as HTMLInputElement).value
 
-        try {
-          await register(username, password, displayname, profilepic)
-          window.location.href = '/login'
-        } catch (err) {
-          error = err.message
-          document.querySelector('body').innerHTML += `<p style="color: red">${error}</p>`
+        const response = await fetch('/api/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password, displayname, profilepic })
+        })
+
+        const data = await response.json()
+
+        if (data.success) {
+            document.cookie = `${data.sessionCookie.name}=${data.sessionCookie.value}; ${data.sessionCookie.attributes}`
+            window.location.href = "/"
+        } else {
+            alert(data.message)
         }
-      }
-
-      document.querySelector('#signup-form').addEventListener('submit', handleSubmit)
+      })
     </script>
   </body>
 </html>
