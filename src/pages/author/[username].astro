@@ -3,6 +3,8 @@ import { getAuthor, getAuthorPosts } from '../../lib/authors'
 const { username } = Astro.params
 const author = await getAuthor(username)
 const posts = await getAuthorPosts(username)
+export const prerender = false
+
 ---
 <html>
   <body>

@@ -1,6 +1,8 @@
 ---
 import { getPost } from '../../lib/posts'
 import { getComments } from '../../lib/comments'
+export const prerender = false
+
 
 const { postid } = Astro.params
 const post = await getPost(Number(postid))
