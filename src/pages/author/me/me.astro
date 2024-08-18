@@ -1,0 +1,15 @@
+---
+
+---
+<html>
+<body>
+    hello
+    <script>
+        fetch('/api/user/details')
+        .then(response => response.json())
+        .then(data => {
+            window.location.href = `/author/${data.username}`
+        })
+    </script>
+</body>
+</html>

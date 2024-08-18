@@ -1,15 +1,17 @@
 ---
-import { getAuthor, getAuthorPosts } from '../../lib/authors'
+import { getUser, getUserPosts } from '../../lib/authors'
 const { username } = Astro.params
-const author = await getAuthor(username)
-const posts = await getAuthorPosts(username)
+var author = await getUser(username)
+author = author[0]
+delete author.password
+const posts = await getUserPosts(username)
 export const prerender = false
-
 ---
 <html>
   <body>
     <h1>{author.displayname}</h1>
     <img src={author.profilepic} alt="Profile Picture" />
+    <div class="flex gap-2">karma: <p>{author.karma}</p></div>
     <h2>Posts</h2>
     <ul>
       {posts.map(post => (
