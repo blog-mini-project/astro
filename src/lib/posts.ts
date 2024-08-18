@@ -1,10 +1,10 @@
 import { db, Post, sql } from 'astro:db'
 
-export async function makePost(title: string, content: string, author: string, tags: string[]) {
+export async function makePost(title: string, content: string, user: string, tags: string[]) {
     const newPost = await db.insert(Post).values({
         title,
         content,
-        author,
+        user,
         tags,
         published: new Date(),
         upvotes: 0,

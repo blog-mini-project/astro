@@ -5,10 +5,10 @@ export async function getComments(postId: number) {
     return comments
 }
 
-export async function addComment(postId: number, author: string, content: string) {
+export async function addComment(postId: number, user: string, content: string) {
     const newComment = await db.insert(Comment).values({
         postid: postId,
-        author,
+        user,
         content,
         published: new Date(),
         upvotes: 0,
