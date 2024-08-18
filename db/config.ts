@@ -1,6 +1,6 @@
 import { column, defineDb, defineTable, NOW } from "astro:db"
 
-export const Author = defineTable({
+export const User = defineTable({
     columns: {
         username: column.text({ primaryKey: true }),
         password: column.text(),
@@ -23,19 +23,19 @@ export const Post = defineTable({
         title: column.text(),
         content: column.text(),
         published: column.date({ default: NOW }),
-        author: column.text(),
+        user: column.text(),
         upvotes: column.number({ default: 0 }),
         downvotes: column.number({ default: 0 }),
         tags: column.json({ default: [] }),
     },
     foreignKeys: [
         {
-            columns: ["author"],
-            references: () => [Author.columns.username],
+            columns: ["user"],
+            references: () => [User.columns.username],
         },
     ],
     indexes: [
-        { on: ["author"], unique: true }
+        { on: ["user"], unique: true }
     ]
 })
 
@@ -49,7 +49,7 @@ export const Tag = defineTable({
 export const Comment = defineTable({
     columns: {
         id: column.number({ primaryKey: true }),
-        author: column.text(),
+        user: column.text(),
         content: column.text({ optional: true }),
         published: column.date({ default: NOW }),
         upvotes: column.number({ default: 0 }),
@@ -58,8 +58,8 @@ export const Comment = defineTable({
     },
     foreignKeys: [
         {
-            columns: ["author"],
-            references: () => [Author.columns.username],
+            columns: ["user"],
+            references: () => [User.columns.username],
         },
         {
             columns: ["postid"],
@@ -74,24 +74,24 @@ export const Comment = defineTable({
 export const Session = defineTable({
     columns: {
         id: column.text({ primaryKey: true }),
-        username: column.text(),
-        expires_at: column.number(),
+        userId: column.text(),
+        expiresAt: column.date({ default: NOW }),
     },
     foreignKeys: [
         {
-            columns: ["username"],
-            references: () => [Author.columns.username],
+            columns: ["userId"],
+            references: () => [User.columns.username],
         },
     ],
     indexes: [
-        { on: ["username"], unique: false }
+        { on: ["userId"], unique: false }
     ]
 })
 
 const dbConfig = defineDb({
     tables: {
         Comment,
-        Author,
+        User,
         Post,
         Tag,
         Session,
