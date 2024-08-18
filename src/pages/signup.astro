@@ -1,5 +1,7 @@
 ---
+import { lucia } from "../lib/auth"
 
+const cookiename = lucia.sessionCookieName
 ---
 
 <html>
@@ -12,13 +14,25 @@
       <input type="text" id="signupProfilePic" name="profilepic" placeholder="Profile Picture URL" />
       <button id="signupButton">Sign Up</button>
     </div>
-    <script>
+    <script define:vars={{ cookiename }}>
+
+      var cookies = document.cookie.split(';').reduce((acc, cookie) => {
+        const [name, value] = cookie.split('=').map(c => c.trim())
+        acc[name] = value
+        return acc
+      }, {})
+
+      var checkifloggedin = cookies[cookiename] ?? null
+      if (checkifloggedin) {
+        window.location.href = "/home"
+      }
+
       document.getElementById('signupButton').addEventListener('click', async (event) => {
         event.preventDefault()
-        const username = (document.getElementById("signupUsername") as HTMLInputElement).value
-        const password = (document.getElementById("signupPassword") as HTMLInputElement).value
-        const displayname = (document.getElementById("signupDisplayName") as HTMLInputElement).value
-        const profilepic = (document.getElementById("signupProfilePic") as HTMLInputElement).value
+        const username = document.getElementById("signupUsername").value
+        const password = document.getElementById("signupPassword").value
+        const displayname = document.getElementById("signupDisplayName").value
+        const profilepic = document.getElementById("signupProfilePic").value
 
         const response = await fetch('/api/signup', {
             method: 'POST',
@@ -32,7 +46,7 @@
 
         if (data.success) {
             document.cookie = `${data.sessionCookie.name}=${data.sessionCookie.value}; ${data.sessionCookie.attributes}`
-            window.location.href = "/"
+            window.location.href = "/home"
         } else {
             alert(data.message)
         }
