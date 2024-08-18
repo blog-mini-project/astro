@@ -8,17 +8,25 @@ import Theme from "../components/theme.astro"
 	<title>{title}</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://aqclf.xyz/tailwind.css" is:inline></script>
 	<link rel="shortcut icon" href="/pen.png" type="image/x-icon">
 	<link rel="stylesheet" href="./css/button.css">
   </head>
-  <body class={classes}>
+  <body class={classes} style="background-color: black;">
 		<Theme />
+		
 		<slot />
+
 		<script>
+		
+	        var original = localStorage.getItem('theme') ?? 'light'
+
 			document.body.style.transition = "background-color 0.3s, color 0.3s"
 			document.querySelectorAll('button').forEach(button => {
 				button.style.transition = "background-color 0.3s, color 0.3s"
 			})
+			
+			document.body.style.backgroundColor = ""
 
 			function checkLocalStorage() {
 				var bgcolors = ["gray", "pink"]
@@ -32,7 +40,6 @@ import Theme from "../components/theme.astro"
 				document.body.classList.remove(`text-${textcolors[0]}`, `text-${textcolors[1]}`)
 				document.body.classList.add(bgColorClass)
 				document.body.classList.add(textColorClass)
-				// make this work
 				var buttonBgColorClass = isDarkMode ? `bg-${buttoncolors[0]}-400` : `bg-${buttoncolors[1]}-400`
 				var buttonbghoverColorClass = isDarkMode ? `hover:bg-${buttoncolors[0]}-500` : `hover:bg-${buttoncolors[1]}-500`
 				var buttonTextColorClass = isDarkMode ? `text-${buttontextcolors[0]}` : `text-${buttontextcolors[1]}`
@@ -48,6 +55,11 @@ import Theme from "../components/theme.astro"
 			}
 
 			setInterval(checkLocalStorage, 10)
+			
+			setTimeout(() => {
+				localStorage.setItem('theme', original)
+			}, 50)
 		</script>
+
   </body>
 </html>

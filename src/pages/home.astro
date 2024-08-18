@@ -1,19 +1,21 @@
 ---
 import Base from '../layouts/base.astro'
-import Theme from '../components/theme.astro'
 
 import { lucia } from "../lib/auth"
+
+import { Image } from "astro:assets"
+import pen from "../../public/pen.png"
 
 const cookiename = lucia.sessionCookieName
 ---
 <Base title="home" classes="min-h-screen flex flex-col items-center justify-center">
-    <img src="/pen.png" alt="pen" class="max-w-[90vw]">
+    <Image inferSize={true} src={pen} alt="pen" class='max-w-[90vw]' />
     <div class='text-3xl mb-2'>blog</div>
       <div class='w-[300px] max-w-[90vw] flex flex-col gap-2'>
-        <button class='rounded-full w-full'>Read</button>
-        <button class='rounded-full w-full'>Write</button>
-        <button class='rounded-full w-full'>Leaderboard</button>
-        <button class='rounded-full w-full' id="logout">Log out</button>
+        <button class='rounded-full w-full p-2' onclick="window.location.href='/read'">Read</button>
+        <button class='rounded-full w-full p-2' onclick="window.location.href='/write'">Write</button>
+        <button class='rounded-full w-full p-2' onclick="window.location.href='/leaderboard'">Leaderboard</button>
+        <button class='rounded-full w-full p-2' id="logout">Log out</button>
       </div>
     </div>
     <script define:vars={{ cookiename }}>
@@ -29,9 +31,12 @@ const cookiename = lucia.sessionCookieName
             window.location.href = "/login"
         }
 
-        document.getElementById('logout').addEventListener('click', () => {
+        document.getElementById('logout').addEventListener('click', async () => {
             document.cookie = `${cookiename}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+            await fetch('/api/logout')
+            alert('logged out')
             window.location.href = "/login"
-        })
+        })        
+        
     </script>
 </Base>

@@ -34,9 +34,9 @@ export const Post = defineTable({
             references: () => [User.columns.username],
         },
     ],
-    indexes: [
-        { on: ["user"], unique: true }
-    ]
+    // indexes: [
+    //     { on: ["user"], unique: true }
+    // ]
 })
 
 export const Tag = defineTable({

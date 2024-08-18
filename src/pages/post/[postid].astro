@@ -1,40 +1,22 @@
-<!-- ---
+---
 export const prerender = false
 
 import { getPost } from '../../lib/posts'
 import { getComments } from '../../lib/comments'
-import htmx from 'htmx'
+import { lucia } from '../../lib/auth'
+
+import Base from '../../layouts/base.astro'
 
 const { postid } = Astro.params
-const post = await getPost(Number(postid))
+var post = await getPost(Number(postid))
+post = post[0]
 const comments = await getComments(Number(postid))
 
 let error = null
-let user = null
 
-document.getElementById("#comment").onsubmit(event =>  {
-    const formData = new FormData(event.target)
-    const content = formData.get('content').toString()
-
-    fetch(`/api/post/${postid}/comment`, {
-        method: 'POST',
-        body: JSON.stringify({ content, user: user.username })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            error = data.error
-        } else {
-            htmx.trigger(htmx.find('#comments'), 'refresh')
-        }
-    })
-    .catch(err => {
-        error = 'An error occurred while posting your comment.'
-    })
-})
+const cookiename = lucia.sessionCookieName
 ---
-<html>
-  <body>
+<Base title={post.title} classes="min-h-screen flex flex-col items-center justify-start py-10">
     <h1>{post.title}</h1>
     <p>{post.content}</p>
     <p>Author: <a href={`/author/${post.user}`}>{post.user}</a></p>
@@ -48,9 +30,48 @@ document.getElementById("#comment").onsubmit(event =>  {
       </ul>
     </div>
     {error && <p style="color: red;">{error}</p>}
-    <form id="comment">
-      <textarea name="content" placeholder="Add a comment"></textarea>
-      <button type="submit">Submit</button>
+    <form id="commentForm" class='w-[300px] max-w-[90vw] flex flex-col gap-2'>
+      <textarea name="content" placeholder="Add a comment" class='rounded-full w-full p-2' rows="5" required></textarea>
+      <button type="submit" class='rounded-full w-full p-2 bg-blue-500 text-white'>Submit</button>
     </form>
-  </body>
-</html> -->
+    <script define:vars={{ cookiename, post }}>
+        var cookies = document.cookie.split(';').reduce((acc, cookie) => {
+            const [name, value] = cookie.split('=').map(c => c.trim())
+            acc[name] = value
+            return acc
+        }, {})
+
+        var checkifloggedin = cookies[cookiename] ?? null
+        if (!checkifloggedin) {
+            window.location.href = "/login"
+        }
+
+        document.getElementById('commentForm').addEventListener('submit', async (event) => {
+            event.preventDefault()
+            const formData = new FormData(event.target)
+            const content = formData.get('content').toString()
+            console.log('Form content:', content)
+            try {
+                console.log('Sending request to /api/post/${postid}/comment')
+                const response = await fetch(`/api/post/${post.id}/comment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ content, user: user.username })
+                })
+                console.log('Response received:', response)
+                const data = await response.json()
+                console.log('Response data:', data)
+                if (data.error) {
+                    error = data.error
+                } else {
+                    // Handle successful comment submission
+                }
+            } catch (err) {
+                console.error('Fetch error:', err)
+                error = 'An error occurred while posting your comment.'
+            }
+        })
+    </script>
+</Base>

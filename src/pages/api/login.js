@@ -1,6 +1,6 @@
 export const prerender = false
 
-import { User, sql, db } from "astro:db"
+import { User, Session, sql, db } from "astro:db"
 import { lucia } from "../../lib/auth"
 
 export async function POST({ request }) {
@@ -12,9 +12,20 @@ export async function POST({ request }) {
         .get()
 
     if (existingUser) {
+        const oldSessions = await db
+            .select()
+            .from(Session)
+            .where(sql`userId = ${existingUser.username}`)
+            .all()
+
+        for (const oldSession of oldSessions) {
+            await lucia.invalidateUserSessions(oldSession.id)
+            await db.delete(Session).where(sql`id = ${oldSession.id}`)
+            console.log('Deleted old session', oldSession.id)
+        }
+
         const session = await lucia.createSession(existingUser.username, {})
         const sessionCookie = lucia.createSessionCookie(session.id)
-        await db.insert(Session).values({ id: session.id, user_id: existingUser.username, expires_at: session.expires_at })
 
         return new Response(JSON.stringify({
             success: true,

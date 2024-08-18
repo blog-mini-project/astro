@@ -8,51 +8,52 @@ import Base from '../layouts/base.astro'
 <Base title="Sign Up" classes="min-h-screen flex flex-col items-center justify-center gap-2">
     <h1 class="text-4xl p-3">Login</h1>
     <div class="flex flex-col items-center justify-center gap-2">
-          <label for="username">Username:</label>
-          <input type="text" id="username" name="username" required />
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required />
           
-          <label for="password">Password:</label>
-          <input type="password" id="password" name="password" required />
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required />
           
-      
-            <button id="loginButton">Login</button>
-            
+        <button id="loginButton">Login</button>
+    </div>
+    <script define:vars={{ cookiename }}>
 
-        </div>
-        <script define:vars={{ cookiename }}>
-    
-            var cookies = document.cookie.split(';').reduce((acc, cookie) => {
-                const [name, value] = cookie.split('=').map(c => c.trim())
+        var cookies = document.cookie.split(';').reduce((acc, cookie) => {
+            const [name, value] = cookie.split('=').map(c => c.trim())
             acc[name] = value
-                acc[name] = value            return acc
-            }, {})
+            acc[name] = value
+            return acc
+        }, {})
     
             var checkifloggedin = cookies[cookiename] ?? null
-        if (checkifloggedin) {
-            if (checkifloggedin) {            window.location.href = "/home"
+            if (checkifloggedin) {
+                window.location.href = "/home"
             }
+        
     
             document.getElementById('loginButton').addEventListener('click', async (event) => {
-            event.preventDefault()
-                event.preventDefault()            const username = document.getElementById("username").value
+                console.log('clicked')
+                event.preventDefault()
+                const username = document.getElementById("username").value
                 const password = document.getElementById("password").value
     
                 const response = await fetch('/api/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
-                },
-                    },                body: JSON.stringify({ username, password })
-            })
+                    },
+                    body: JSON.stringify({ username, password })
                 })
+    
                 const data = await response.json()
+                console.log(data)
     
                 if (data.success) {
                     document.cookie = `${data.sessionCookie.name}=${data.sessionCookie.value}; ${data.sessionCookie.attributes}`
                     window.location.href = "/home"
                 } else {
                     alert(data.message)
-            }
-        })
+                }
+            })
     </script>
 </Base>
