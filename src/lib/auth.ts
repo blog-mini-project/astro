@@ -1,36 +1,25 @@
+import { db, Session, User } from "astro:db"
 import { Lucia } from "lucia"
-import { DrizzleSQLiteAdapter } from "@lucia-auth/adapter-drizzle"
-import { db } from "astro:db"
+import { AstroDBAdapter } from "../adapter/lucia-astrodb"
 
-import { asDrizzleTable } from "@astrojs/db/runtime"
-import { Session, Author } from "../../db/config"
+interface DatabaseUserAttributes {
+	username: string;
+}
 
-const adapter = new DrizzleSQLiteAdapter(
-	db as any,
-	asDrizzleTable("Session", Session),
-	asDrizzleTable("Author", Author),
-)
+const { PROD } = import.meta.env
+
+const adapter = new AstroDBAdapter(db, Session as any, User as any)
 
 export const lucia = new Lucia(adapter, {
-	sessionCookie: {
-		attributes: {
-			secure: import.meta.env.PROD,
-		},
-	},
-	getUserAttributes: (attributes) => {
-		return {
-			username: attributes.username,
-		}
-	},
+	sessionCookie: { attributes: { secure: PROD } },
+	getUserAttributes: (attributes) => ({
+	  username: attributes.username,
+	}),
 })
 
 declare module "lucia" {
 	interface Register {
-		Lucia: typeof lucia
-		DatabaseUserAttributes: DatabaseUserAttributes
+	  Lucia: typeof lucia;
+	  DatabaseUserAttributes: DatabaseUserAttributes;
 	}
-}
-
-interface DatabaseUserAttributes {
-	username: string
-}
+  }

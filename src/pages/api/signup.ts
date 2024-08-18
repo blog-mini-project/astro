@@ -1,13 +1,13 @@
 export const prerender = false
 
-import { Author, sql, db } from "astro:db"
+import { User, sql, db } from "astro:db"
 import { lucia } from "../../lib/auth"
 
 export async function POST({ request }) {
     const { username, password, displayname, profilepic } = await request.json()
     const existingUser = await db
         .select()
-        .from(Author)
+        .from(User)
         .where(sql`username = ${username}`)
         .get()
 
@@ -20,8 +20,13 @@ export async function POST({ request }) {
         })
     } else {
         const newUser = await db
-            .insert(Author)
-            .values({ username, password, displayname, profilepic })
+            .insert(User)
+            .values({ 
+                username: username, 
+                password: password, 
+                displayname: displayname, 
+                profilepic: profilepic
+            })
             .returning()
             .get()
 

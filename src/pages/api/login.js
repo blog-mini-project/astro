@@ -1,13 +1,13 @@
 export const prerender = false
 
-import { Author, sql, db } from "astro:db"
+import { User, sql, db } from "astro:db"
 import { lucia } from "../../lib/auth"
 
 export async function POST({ request }) {
     const { username, password } = await request.json()
     const existingUser = await db
         .select()
-        .from(Author)
+        .from(User)
         .where(sql`username = ${username} and password = ${password}`)
         .get()
 

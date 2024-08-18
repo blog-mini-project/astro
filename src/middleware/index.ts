@@ -1,74 +1,59 @@
-import { lucia } from "../lib/auth"
-import { verifyRequestOrigin } from "lucia"
 import { defineMiddleware } from "astro:middleware"
-import { Author, db, eq } from "astro:db"
+import { verifyRequestOrigin } from "lucia"
+import { lucia } from "../lib/auth"
 
 export const onRequest = defineMiddleware(async (context, next) => {
-	if (context.request.method !== "GET") {
-		const originHeader = context.request.headers.get("Origin")
-		const hostHeader = context.request.headers.get("Host")
-		if (
-			!originHeader ||
-			!hostHeader ||
-			!verifyRequestOrigin(originHeader, [hostHeader])
-		) {
-			return new Response(null, {
-				status: 403,
-			})
-		}
-	}
+  if (context.request.method !== "GET") {
+    const originHeader = context.request.headers.get("Origin")
+    const hostHeader = context.request.headers.get("Host")
 
-	const sessionId = context.cookies.get(lucia.sessionCookieName)?.value ?? null
+    if (!originHeader || !hostHeader || !verifyRequestOrigin(originHeader, [hostHeader])) {
+      return new Response(null, { status: 403 })
+    }
+  }
 
-	context.locals.isLoggedIn = false
+  const sessionId = context.cookies.get(lucia.sessionCookieName)?.value ?? null
 
-	if (!sessionId) {
-		context.locals.author = null
-		context.locals.session = null
-		return next()   
-	}
+  if (!sessionId) {
+    context.locals.user = null
+    context.locals.session = null
+    return next()
+  }
 
-	const { session, author } = await lucia.validateSession(sessionId)
+  let session, user
+  
+  try {
+    if (sessionId !== null) {
+      ({ session, user } = await lucia.validateSession(sessionId))
+    }
+  } catch (error) {
+    context.locals.user = null
+    context.locals.session = null
+    return next()
+  }
 
-	if (!session || session === null) {
-		const sessionCookie = lucia.createBlankSessionCookie()
-		context.cookies.set(
-			sessionCookie.name,
-			sessionCookie.value,
-			sessionCookie.attributes,
-		)
-		return next()
-	}
+  if (session && session.fresh) {
+    const sessionCookie = lucia.createSessionCookie(session.id)
 
-	const isSessionFresh = session.expiresAt.getTime() > new Date().getTime()
-	session.fresh = isSessionFresh
+    context.cookies.set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes,
+    )
+  }
 
-	if (session.fresh) {
-		const sessionCookie = lucia.createSessionCookie(session.id)
-		context.cookies.set(
-			sessionCookie.name,
-			sessionCookie.value,
-			sessionCookie.attributes,
-		)
+  if (!session) {
+    const sessionCookie = lucia.createBlankSessionCookie()
 
-		const [dbUser] = await db
-			.select()
-			.from(Author)
-			.where(eq(Author.username, author.username))
+    context.cookies.set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes,
+    )
+  }
 
-		context.locals.dbUser = dbUser
-		context.locals.isLoggedIn = true
-	} else if (session && !session.fresh) {
-		const sessionCookie = lucia.createBlankSessionCookie()
-		await lucia.invalidateSession(session.id)
-		context.cookies.set(
-			sessionCookie.name,
-			sessionCookie.value,
-			sessionCookie.attributes,
-		)
-	}
+  context.locals.session = session
+  context.locals.user = user
 
-	context.locals.session = session
-	context.locals.author = author
-	return next()
+  return next()
 })
