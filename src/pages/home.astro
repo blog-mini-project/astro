@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/base.astro'
+import Theme from '../components/theme.astro'
+---
+<Base title="home" classes="bg-pink-500 min-h-screen flex flex-col items-center justify-center">
+    <Theme />
+    <img src="/pen.png" alt="pen" class="max-w-[90vw]">
+    <div class='text-3xl mb-2'>blog</div>
+      <div class='w-[300px] max-w-[90vw] flex flex-col gap-2'>
+        <button class='rounded-full w-full'>Read</button>
+        <button class='rounded-full w-full'>Write</button>
+        <button class='rounded-full w-full'>Leaderboard</button>
+        <button class='rounded-full w-full'>Log out</button>
+      </div>
+    </div>
+</Base>
