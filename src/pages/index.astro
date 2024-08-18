@@ -5,6 +5,7 @@ const posts = await getPosts()
 <html>
   <body>
     <h1>Blog Home</h1>
+    <div>Welcome <span id="username">username</span></div>
     <ul>
       {posts.map(post => (
         <li>
@@ -12,5 +13,13 @@ const posts = await getPosts()
         </li>
       ))}
     </ul>
+    <script>
+        fetch('/api/user/details')
+          .then(res => res.json())
+          .then(data => {
+            document.getElementById('username').innerText = data.username
+            console.log(data)
+          })
+    </script>
   </body>
 </html>
