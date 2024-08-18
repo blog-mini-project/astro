@@ -1,0 +1,22 @@
+button {
+    padding: 3px 10px;
+    width: 100%;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+@keyframes pop {
+    0% {
+      transform: scale(0.98);
+    }
+    40% {
+      transform: scale(1.02);
+    }
+    100% {
+      transform: scale(1);
+    }
+}
+
+button:active {
+    animation: pop 0.5s ease-out;
+}

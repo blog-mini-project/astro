@@ -1,16 +1,37 @@
 ---
 import Base from '../layouts/base.astro'
 import Theme from '../components/theme.astro'
+
+import { lucia } from "../lib/auth"
+
+const cookiename = lucia.sessionCookieName
 ---
-<Base title="home" classes="bg-pink-500 min-h-screen flex flex-col items-center justify-center">
-    <Theme />
+<Base title="home" classes="min-h-screen flex flex-col items-center justify-center">
     <img src="/pen.png" alt="pen" class="max-w-[90vw]">
     <div class='text-3xl mb-2'>blog</div>
       <div class='w-[300px] max-w-[90vw] flex flex-col gap-2'>
         <button class='rounded-full w-full'>Read</button>
         <button class='rounded-full w-full'>Write</button>
         <button class='rounded-full w-full'>Leaderboard</button>
-        <button class='rounded-full w-full'>Log out</button>
+        <button class='rounded-full w-full' id="logout">Log out</button>
       </div>
     </div>
+    <script define:vars={{ cookiename }}>
+
+        var cookies = document.cookie.split(';').reduce((acc, cookie) => {
+            const [name, value] = cookie.split('=').map(c => c.trim())
+            acc[name] = value
+            return acc
+        }, {})
+
+        var checkifloggedin = cookies[cookiename] ?? null
+        if (!checkifloggedin) {
+            window.location.href = "/login"
+        }
+
+        document.getElementById('logout').addEventListener('click', () => {
+            document.cookie = `${cookiename}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+            window.location.href = "/login"
+        })
+    </script>
 </Base>
