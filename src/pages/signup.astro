@@ -11,8 +11,8 @@ import Base from '../layouts/base.astro'
       <input type="text" id="signupUsername" name="username" placeholder="Username" required />
       <input type="password" id="signupPassword" name="password" placeholder="Password" required />
       <input type="text" id="signupDisplayName" name="displayname" placeholder="Display Name" />
-      <input type="text" id="signupProfilePic" name="profilepic" placeholder="Profile Picture URL" />
-      <button id="signupButton">Sign Up</button>
+      <input type="file" id="signupProfilePic" name="profilepic" accept="image/*" />
+      <button id="signupButton" class="rounded p-2">Sign Up</button>
     </div>
     <script define:vars={{ cookiename }}>
 
@@ -32,7 +32,21 @@ import Base from '../layouts/base.astro'
         const username = document.getElementById("signupUsername").value
         const password = document.getElementById("signupPassword").value
         const displayname = document.getElementById("signupDisplayName").value
-        const profilepic = document.getElementById("signupProfilePic").value
+        const profilepicFile = document.getElementById("signupProfilePic").files[0]
+
+        if (!username || !password) {
+          alert("Username and password are required.")
+          return
+        }
+
+        let profilepic = ""
+        if (profilepicFile) {
+          const reader = new FileReader()
+          reader.readAsDataURL(profilepicFile)
+          profilepic = await new Promise((resolve) => {
+            reader.onload = () => resolve(reader.result)
+          })
+        }
 
         const response = await fetch('/api/signup', {
             method: 'POST',

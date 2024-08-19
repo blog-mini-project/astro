@@ -6,19 +6,34 @@ author = author[0]
 delete author.password
 const posts = await getUserPosts(username)
 export const prerender = false
+
+import Base from '../../layouts/base.astro'
 ---
-<html>
-  <body>
-    <h1>{author.displayname}</h1>
-    <img src={author.profilepic} alt="Profile Picture" />
-    <div class="flex gap-2">karma: <p>{author.karma}</p></div>
-    <h2>Posts</h2>
-    <ul>
-      {posts.map(post => (
-        <li>
-          <a href={`/post/${post.id}`}>{post.title}</a>
-        </li>
-      ))}
-    </ul>
-  </body>
-</html>
+<Base title={author.displayname} classes="min-h-screen flex flex-col items-center justify-start py-10">
+    <div class="max-w-3xl w-full bg-white text-black shadow-md rounded-lg p-6">
+        <div class="flex items-center gap-4 mb-6">
+            <img src={author.profilepic} alt="Profile Picture" class="w-24 h-24 rounded-full object-cover" />
+            <div>
+                <h1 class="text-3xl font-bold">{author.displayname}</h1>
+                <div class="flex items-center gap-2 text-gray-500">
+                    <span>karma:</span>
+                    <p class="font-semibold">{author.karma}</p>
+                </div>
+            </div>
+        </div>
+        <h2 class="text-2xl font-semibold mb-4">Posts</h2>
+        <ul class="space-y-4">
+          {posts.map(post => (
+            <li class="bg-gray-100 p-4 rounded-lg shadow-sm">
+                <a href={`/post/${post.id}`} class="text-blue-500 hover:underline text-xl font-semibold">{post.title}</a>
+                <p class="text-gray-700 mt-2">{post.content}</p>
+                <div class="flex items-center gap-4 text-gray-500 mt-2">
+                    <span>Upvotes: {post.upvotes}</span>
+                    <span>Downvotes: {post.downvotes}</span>
+                    <span>Published: {post.published}</span>
+                </div>
+            </li>
+        ))}
+        </ul>
+    </div>
+</Base>

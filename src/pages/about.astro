@@ -1,0 +1,13 @@
+---
+import Base from "../layouts/base.astro"
+import { Image } from "astro:assets"
+import pen from "../../public/pen.png"
+---
+
+<Base title="about" classes="min-h-screen flex flex-col items-center justify-center gap-2">
+    <Image inferSize={true} src={pen} alt="pen" class='max-w-[90vw]' />
+    <div class='text-3xl mb-2'>about</div>
+    <div class='w-[300px] max-w-[90vw] flex flex-col gap-2 items-center'>
+      <h1>about</h1>
+    </div>
+</Base>

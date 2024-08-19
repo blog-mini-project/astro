@@ -16,24 +16,37 @@ let error = null
 
 const cookiename = lucia.sessionCookieName
 ---
-<Base title={post.title} classes="min-h-screen flex flex-col items-center justify-start py-10">
-    <h1>{post.title}</h1>
-    <p>{post.content}</p>
-    <p>Author: <a href={`/author/${post.user}`}>{post.user}</a></p>
-    <p>Published: {post.published}</p>
-    <h2>Comments</h2>
-    <div id="comments">
-      <ul>
-        {comments.map(comment => (
-          <li>{comment.content} - {comment.user}</li>
-        ))}
-      </ul>
+<Base title={post.title} classes="min-h-screen flex flex-col items-center justify-start py-10 bg-gray-100">
+    <div class="max-w-3xl w-full bg-white text-black shadow-md rounded-lg p-6">
+        <h1 class="text-3xl font-bold mb-4">{post.title}</h1>
+        <p class="text-gray-700 mb-4">{post.content}</p>
+        <div class="flex items-center gap-4 text-gray-500 mb-4">
+            <span>Author: <a href={`/author/${post.user}`} class="text-blue-500 hover:underline">{post.user}</a></span>
+            <span>Published: {post.published}</span>
+            <span>Upvotes: {post.upvotes}</span>
+            <span>Downvotes: {post.downvotes}</span>
+        </div>
+        <h2 class="text-2xl font-semibold mb-4">Comments</h2>
+        <div id="comments" class="mb-6">
+            <ul class="space-y-4">
+                {comments.map(comment => (
+                    
+                    <li class="bg-gray-100 p-4 rounded-lg shadow-sm" data-username={comment.user}>
+                        <div class="flex items-center gap-2 text-gray-500 text-sm mt-2">
+                            <span class="comment-user">Loading user...</span>
+                        </div>
+                        <p class="text-gray-500 text-sm">{comment.published}</p>
+                        <p class="text-gray-700">{comment.content}</p>
+                    </li>
+                ))}
+            </ul>
+        </div>
+        {error && <p class="text-red-500 mb-4">{error}</p>}
+        <form id="commentForm" class="w-full flex flex-col gap-4">
+            <textarea name="content" placeholder="Add a comment" class="rounded-lg w-full p-4 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="5" required></textarea>
+            <button type="submit" class="rounded-lg w-full p-4 bg-blue-500 text-white hover:bg-blue-600">Submit</button>
+        </form>
     </div>
-    {error && <p style="color: red;">{error}</p>}
-    <form id="commentForm" class='w-[300px] max-w-[90vw] flex flex-col gap-2'>
-      <textarea name="content" placeholder="Add a comment" class='rounded-full w-full p-2' rows="5" required></textarea>
-      <button type="submit" class='rounded-full w-full p-2 bg-blue-500 text-white'>Submit</button>
-    </form>
     <script define:vars={{ cookiename, post }}>
         var cookies = document.cookie.split(';').reduce((acc, cookie) => {
             const [name, value] = cookie.split('=').map(c => c.trim())
@@ -45,6 +58,37 @@ const cookiename = lucia.sessionCookieName
         if (!checkifloggedin) {
             window.location.href = "/login"
         }
+
+        async function fetchUser(username) {
+            try {
+                const response = await fetch(`/api/user/${username}`)
+                const data = await response.json()
+                return data
+            } catch (err) {
+                console.error('Fetch user error:', err)
+                return null
+            }
+        }
+
+        async function loadCommentUsers() {
+            const commentElements = document.querySelectorAll('[data-username]')
+            for (const commentElement of commentElements) {
+                const username = commentElement.getAttribute('data-username')
+                const user = await fetchUser(username)
+                if (user) {
+                    const userElement = commentElement.querySelector('.comment-user')
+                    userElement.textContent = user.username
+                    const imgElement = document.createElement('img')
+                    imgElement.src = user.profilepic
+                    imgElement.alt = 'User Profile'
+                    imgElement.className = 'w-6 h-6 rounded-full object-cover'
+                    userElement.prepend(imgElement)
+                    userElement.classList.add('flex', 'items-center', 'gap-2', 'text-gray-500', 'text-xl', 'font-semibold')
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadCommentUsers)
 
         document.getElementById('commentForm').addEventListener('submit', async (event) => {
             event.preventDefault()
@@ -58,7 +102,7 @@ const cookiename = lucia.sessionCookieName
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ content, user: user.username })
+                    body: JSON.stringify({ content })
                 })
                 console.log('Response received:', response)
                 const data = await response.json()
@@ -66,7 +110,8 @@ const cookiename = lucia.sessionCookieName
                 if (data.error) {
                     error = data.error
                 } else {
-                    // Handle successful comment submission
+                    alert('Comment posted successfully')
+                    window.location.reload()
                 }
             } catch (err) {
                 console.error('Fetch error:', err)

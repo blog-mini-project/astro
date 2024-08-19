@@ -39,23 +39,23 @@
 	}
 </style>
 
-<script>
+<script is:inline>
 	document.addEventListener("DOMContentLoaded", () => {
-        const themeCheck = document.querySelector(".theme-check")
+		const themeCheck = document.querySelector(".theme-check")
         
 		const storedTheme = localStorage.getItem("theme")
-
+		
 		const isDarkTheme = storedTheme === "dark"
 		const isLightTheme = storedTheme === "light"
-
+		
 		if (!isDarkTheme || !isLightTheme) {
 			localStorage.setItem("theme", "light")
 		}
-
+		
         document.documentElement.setAttribute("data-theme", isDarkTheme ? "dark" : "light")
         
 		if (isDarkTheme) {
-            themeCheck.checked = true
+			themeCheck.checked = true
         }
 		
 		else {
@@ -63,7 +63,7 @@
 		}
         
 		themeCheck.addEventListener("change", () => {
-            const newTheme = themeCheck.checked ? "dark" : "light"
+			const newTheme = themeCheck.checked ? "dark" : "light"
             document.documentElement.setAttribute("data-theme", newTheme)
             localStorage.setItem("theme", newTheme)
         })

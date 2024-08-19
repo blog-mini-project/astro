@@ -66,9 +66,9 @@ export const Comment = defineTable({
             references: () => [Post.columns.id],
         },
     ],
-    indexes: [
-        { on: ["postid"], unique: true }
-    ]
+    // indexes: [
+    //     { on: ["postid"], unique: true }
+    // ]
 })
 
 export const Session = defineTable({
