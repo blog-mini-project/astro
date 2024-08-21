@@ -4,6 +4,7 @@ export const User = defineTable({
     columns: {
         username: column.text({ primaryKey: true }),
         password: column.text(),
+        email: column.text({ optional: true }),
         displayname: column.text({ optional: true }),
         profilepic: column.text({ optional: true }),
         myupvotes: column.json({ default: {} }),

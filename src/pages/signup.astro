@@ -9,6 +9,7 @@ import Base from '../layouts/base.astro'
     <h1 class="text-4xl p-3">Sign Up</h1>
     <div class="flex flex-col items-center justify-center gap-2">
       <input type="text" id="signupUsername" name="username" placeholder="Username" required />
+      <input type="email" id="signupEmail" name="email" placeholder="Email" required />
       <input type="password" id="signupPassword" name="password" placeholder="Password" required />
       <input type="text" id="signupDisplayName" name="displayname" placeholder="Display Name" />
       <input type="file" id="signupProfilePic" name="profilepic" accept="image/*" />
@@ -30,12 +31,13 @@ import Base from '../layouts/base.astro'
       document.getElementById('signupButton').addEventListener('click', async (event) => {
         event.preventDefault()
         const username = document.getElementById("signupUsername").value
+        const email = document.getElementById("signupEmail").value
         const password = document.getElementById("signupPassword").value
         const displayname = document.getElementById("signupDisplayName").value
         const profilepicFile = document.getElementById("signupProfilePic").files[0]
 
-        if (!username || !password) {
-          alert("Username and password are required.")
+        if (!username || !email || !password) {
+          alert("Username, email, and password are required.")
           return
         }
 
@@ -53,7 +55,7 @@ import Base from '../layouts/base.astro'
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, password, displayname, profilepic })
+            body: JSON.stringify({ username, email, password, displayname, profilepic })
         })
 
         const data = await response.json()

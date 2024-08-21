@@ -19,7 +19,7 @@ import Theme from "../components/theme.astro"
 
 		<script>
 		
-	        var original = localStorage.getItem('theme') ?? 'light'
+	        var original = localStorage.getItem('theme') ?? 'dark'
 
 			document.body.style.transition = "background-color 0.3s, color 0.3s"
 			document.querySelectorAll('button').forEach(button => {
@@ -29,24 +29,24 @@ import Theme from "../components/theme.astro"
 			document.body.style.backgroundColor = ""
 
 			function checkLocalStorage() {
-				var bgcolors = ["gray", "pink"]
+				var bgcolors = ["black", "white"]
 				var textcolors = ["white", "black"]
-				var buttoncolors = ["blue", "green"]
-				var buttontextcolors = ["white", "black"]
+				var buttoncolors = ["white", "black"]
+				var buttontextcolors = ["black", "white"]
 				const isDarkMode = localStorage.getItem("theme") === "dark"
-				var bgColorClass = isDarkMode ? `bg-${bgcolors[0]}-800` : `bg-${bgcolors[1]}-500`
+				var bgColorClass = isDarkMode ? `bg-${bgcolors[0]}` : `bg-${bgcolors[1]}`
 				var textColorClass = isDarkMode ? `text-${textcolors[0]}` : `text-${textcolors[1]}`
-				document.body.classList.remove(`bg-${bgcolors[0]}-800`, `bg-${bgcolors[1]}-500`)
+				document.body.classList.remove(`bg-${bgcolors[0]}`, `bg-${bgcolors[1]}`)
 				document.body.classList.remove(`text-${textcolors[0]}`, `text-${textcolors[1]}`)
 				document.body.classList.add(bgColorClass)
 				document.body.classList.add(textColorClass)
-				var buttonBgColorClass = isDarkMode ? `bg-${buttoncolors[0]}-400` : `bg-${buttoncolors[1]}-400`
-				var buttonbghoverColorClass = isDarkMode ? `hover:bg-${buttoncolors[0]}-500` : `hover:bg-${buttoncolors[1]}-500`
+				var buttonBgColorClass = isDarkMode ? `bg-${buttoncolors[0]}` : `bg-${buttoncolors[1]}`
+				var buttonbghoverColorClass = isDarkMode ? `hover:bg-${buttoncolors[0]}` : `hover:bg-${buttoncolors[1]}`
 				var buttonTextColorClass = isDarkMode ? `text-${buttontextcolors[0]}` : `text-${buttontextcolors[1]}`
 				var buttons = document.querySelectorAll('button')
 				buttons.forEach(button => {
-					button.classList.remove(`bg-${buttoncolors[0]}-400`, `bg-${buttoncolors[1]}-400`)
-					button.classList.remove(`hover:bg-${buttoncolors[0]}-500`, `hover:bg-${buttoncolors[1]}-500`)
+					button.classList.remove(`bg-${buttoncolors[0]}`, `bg-${buttoncolors[1]}`)
+					button.classList.remove(`hover:bg-${buttoncolors[0]}`, `hover:bg-${buttoncolors[1]}`)
 					button.classList.remove(`text-${buttontextcolors[0]}`, `text-${buttontextcolors[1]}`)
 					button.classList.add(buttonBgColorClass)
 					button.classList.add(buttonbghoverColorClass)

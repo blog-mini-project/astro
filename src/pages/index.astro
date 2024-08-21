@@ -1,4 +1,7 @@
 ---
+import { lucia } from "../lib/auth"
+const cookiename = lucia.sessionCookieName
+
 import Base from "../layouts/base.astro"
 import { Image } from "astro:assets"
 import pen from "../../public/pen.png"
@@ -12,4 +15,18 @@ import pen from "../../public/pen.png"
       <button class='rounded-full w-full p-2' onclick="window.location.href='login'">login</button>
       <button class='rounded-full w-full p-2' style="background-color: red;" onclick="window.location.href='about'">about</button>
     </div>
+    <script define:vars={{ cookiename }}>
+
+      var cookies = document.cookie.split(';').reduce((acc, cookie) => {
+          const [name, value] = cookie.split('=').map(c => c.trim())
+          acc[name] = value
+          acc[name] = value
+          return acc
+      }, {})
+  
+          var checkifloggedin = cookies[cookiename] ?? null
+          if (checkifloggedin) {
+              window.location.href = "/home"
+          }
+      </script>
 </Base>

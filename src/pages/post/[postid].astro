@@ -44,7 +44,7 @@ const cookiename = lucia.sessionCookieName
         {error && <p class="text-red-500 mb-4">{error}</p>}
         <form id="commentForm" class="w-full flex flex-col gap-4">
             <textarea name="content" placeholder="Add a comment" class="rounded-lg w-full p-4 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="5" required></textarea>
-            <button type="submit" class="rounded-lg w-full p-4 bg-blue-500 text-white hover:bg-blue-600">Submit</button>
+            <button type="submit" class="rounded-lg w-full p-4 bg-blue-500 text-white hover:bg-blue-600" style="background-color: blue;">Submit</button>
         </form>
     </div>
     <script define:vars={{ cookiename, post }}>

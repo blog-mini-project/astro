@@ -12,3 +12,8 @@ export async function getUserPosts(username: string) {
     const posts = await db.select().from(Post).where(sql`user = ${username}`).orderBy(sql`published desc`).limit(25)
     return posts
 }
+
+export async function getUsersByKarma() {
+    const users = await db.select().from(User).orderBy(sql`karma desc`).limit(25)
+    return users
+}

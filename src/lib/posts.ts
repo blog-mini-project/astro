@@ -29,6 +29,10 @@ export async function getPosts() {
 }
 
 export async function getPostsByTag(tag: string) {
-    const posts = await db.select().from(Post).where(sql`tags @> ${tag}`).orderBy(sql`published desc`).limit(25)
+    const posts = await db.select()
+        .from(Post)
+        .where(sql`tags LIKE ${'%' + tag + '%'}`)
+        .orderBy(sql`published desc`)
+        .limit(25)
     return posts
 }

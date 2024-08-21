@@ -4,7 +4,7 @@ import { User, sql, db } from "astro:db"
 import { lucia } from "../../lib/auth"
 
 export async function POST({ request }) {
-    const { username, password, displayname, profilepic } = await request.json()
+    const { username, password, email, displayname, profilepic } = await request.json()
     const existingUser = await db
         .select()
         .from(User)
@@ -24,6 +24,7 @@ export async function POST({ request }) {
             .values({ 
                 username: username, 
                 password: password, 
+                email: email,
                 displayname: displayname, 
                 profilepic: profilepic
             })

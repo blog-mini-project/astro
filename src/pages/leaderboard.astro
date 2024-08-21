@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/base.astro'
+import { lucia } from "../lib/auth"
+import { getUsersByKarma } from '../lib/authors'
+
+const cookiename = lucia.sessionCookieName
+
+let posts = await getUsersByKarma()
+---
+<Base title="Leaderboard    " classes="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
+    <div class='text-4xl font-bold mb-6'>Leaderboard</div>
+    <div id="posts-container" class='w-full max-w-3xl flex flex-col gap-4'>
+        {posts.length > 0 ? (
+            posts.map(post => (
+                <div class='border rounded-lg p-4 bg-white text-black shadow-md cursor-pointer' key={post.id} data-post-id={post.id} onclick={`window.location.href='/post/${post.id}'`}>
+                    <div class='text-sm text-gray-500 mb-2'>
+                        
+                    </div>
+                    <div class='author-details text-sm text-gray-500 mt-2'>
+                        Loading author details...
+                    </div>
+                </div>
+            ))
+        ) : (
+            <div class='text-center text-gray-500'>No users available</div>
+        )}
+    </div>
+    <script define:vars={{ cookiename, posts }}>
+        var cookies = document.cookie.split(';').reduce((acc, cookie) => {
+            const [name, value] = cookie.split('=').map(c => c.trim())
+            acc[name] = value
+            return acc
+        }, {})
+
+        var checkifloggedin = cookies[cookiename] ?? null
+        if (!checkifloggedin) {
+            window.location.href = "/login"
+        }
+    </script>
+</Base>
