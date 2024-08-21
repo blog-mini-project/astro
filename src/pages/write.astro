@@ -4,15 +4,12 @@ import { lucia } from "../lib/auth"
 
 const cookiename = lucia.sessionCookieName
 ---
-<Base title="Write a Post" classes="min-h-screen flex flex-col items-center justify-center">
-    <div class='text-3xl mb-2'>Write a New Post</div>
-<form id="postForm" class='w-[300px] max-w-[90vw] flex flex-col gap-2'>
-    <input type="text" id="title" name="title" placeholder="Title" class='w-full p-2' required>
-    <textarea id="content" name="content" placeholder="Content" class='w-full p-2' rows="5" required></textarea>
-    <input type="text" id="tags" name="tags" placeholder="Tags (comma separated)" class='w-full p-2'>
-    <button type="submit" class='rounded-full w-full p-2 bg-blue-500 text-white'>Submit</button>
-    <p id="hello" contenteditable="true">title</p>
-    <button onclick="alert(document.getElementById('hello').innerText)">haha</button>
+<Base title="Write a Post" classes="min-h-screen flex flex-col">
+<form id="postForm" class='flex flex-col gap-2 items-center'>
+    <h1 id="title" class='w-fit p-2 text-4xl' contenteditable="true">Title ( change this by clicking on it )</h1>
+    <textarea id="content" name="content" class="flex w-[94vw] max-w-[600px] rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-none focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[300px] resize-none" placeholder="Start writing your blog post here..."></textarea>
+    <input type="text" id="tags" name="tags" placeholder="Tags (comma separated)" class='w-[94vw] max-w-[600px] p-2 rounded-md border border-input text-sm focus:outline-none focus:ring-none focus-visible:ring-ring focus-visible:ring-offset-2' />
+    <button type="submit" class='p-2 w-[94vw] max-w-[600px] rounded'>Submit</button>
 </form>
 <script define:vars={{ cookiename }}>
     var cookies = document.cookie.split(';').reduce((acc, cookie) => {
@@ -28,7 +25,7 @@ const cookiename = lucia.sessionCookieName
 
     document.getElementById('postForm').addEventListener('submit', async (event) => {
         event.preventDefault()
-        const title = document.getElementById('title').value
+        const title = document.getElementById('title').innerText
         const content = document.getElementById('content').value
         const tags = document.getElementById('tags').value.split(',').map(tag => tag.trim())
 

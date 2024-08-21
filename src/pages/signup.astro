@@ -5,16 +5,21 @@ const cookiename = lucia.sessionCookieName
 
 import Base from '../layouts/base.astro'
 ---
-<Base title="Sign Up" classes="min-h-screen flex flex-col items-center justify-center gap-2">
+<Base title="Sign Up" classes="min-h-screen flex flex-col items-center">
+  <div class="flex flex-col items-center justify-center gap-2 grow">
     <h1 class="text-4xl p-3">Sign Up</h1>
     <div class="flex flex-col items-center justify-center gap-2">
-      <input type="text" id="signupUsername" name="username" placeholder="Username" required />
-      <input type="email" id="signupEmail" name="email" placeholder="Email" required />
-      <input type="password" id="signupPassword" name="password" placeholder="Password" required />
-      <input type="text" id="signupDisplayName" name="displayname" placeholder="Display Name" />
-      <input type="file" id="signupProfilePic" name="profilepic" accept="image/*" />
+      <input type="text" id="signupUsername" name="username" placeholder="Username" required class="bg-white focus:outline-none text-black px-2 py-1 rounded" />
+      <input type="email" id="signupEmail" name="email" placeholder="Email" required class="bg-white focus:outline-none text-black px-2 py-1 rounded" />
+      <input type="password" id="signupPassword" name="password" placeholder="Password" required class="bg-white focus:outline-none text-black px-2 py-1 rounded" />
+      <input type="text" id="signupDisplayName" name="displayname" placeholder="Display Name" class="bg-white focus:outline-none text-black px-2 py-1 rounded" />
+      <div class="flex flex-col gap-1 bg-white p-2 rounded">
+        <label for="profilepic" class="text-sm">Profile Picture:</label>
+        <input type="file" id="signupProfilePic" name="profilepic" accept="image/*" />
+      </div>
       <button id="signupButton" class="rounded p-2">Sign Up</button>
     </div>
+  </div>
     <script define:vars={{ cookiename }}>
 
       var cookies = document.cookie.split(';').reduce((acc, cookie) => {
@@ -67,5 +72,9 @@ import Base from '../layouts/base.astro'
             alert(data.message)
         }
       })
+
+      // get all headers and remove the second one
+      const headers = document.querySelectorAll('header')
+      headers[1].remove()
     </script>
 <Base>

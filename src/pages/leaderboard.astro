@@ -7,7 +7,7 @@ const cookiename = lucia.sessionCookieName
 
 let posts = await getUsersByKarma()
 ---
-<Base title="Leaderboard    " classes="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
+<Base title="Leaderboard" classes="min-h-screen flex flex-col items-center">
     <div class='text-4xl font-bold mb-6'>Leaderboard</div>
     <div id="posts-container" class='w-full max-w-3xl flex flex-col gap-4'>
         {posts.length > 0 ? (

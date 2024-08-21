@@ -5,16 +5,21 @@ const cookiename = lucia.sessionCookieName
 
 import Base from '../layouts/base.astro'
 ---
-<Base title="Login" classes="min-h-screen flex flex-col items-center justify-center gap-2">
-    <h1 class="text-4xl p-3">Login</h1>
-    <div class="flex flex-col items-center justify-center gap-2">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required />
-          
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
-          
-        <button id="loginButton" class="p-2 rounded">Login</button>
+<Base title="Login" classes="min-h-screen flex flex-col items-center">
+    <div class="flex flex-col items-center justify-center gap-2 grow">
+
+        <h1 class="text-4xl p-3">Login</h1>
+        <div class="flex flex-col items-center justify-center gap-2">
+            <div class="flex flex-col gap-1">
+                <label for="username" class="text-sm">Username:</label>
+                <input type="text" id="username" name="username" required class="bg-white focus:outline-none text-black px-2 py-1 rounded" />
+            </div>
+            <div class="flex flex-col gap-1">
+                <label for="password" class="text-sm">Password:</label>
+                <input type="password" id="password" name="password" required class="bg-white focus:outline-none text-black px-2 py-1 rounded" />
+            </div>
+            <button id="loginButton" class="p-2 rounded mt-2">Login</button>
+        </div>
     </div>
     <script define:vars={{ cookiename }}>
 

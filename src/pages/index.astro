@@ -7,13 +7,15 @@ import { Image } from "astro:assets"
 import pen from "../../public/pen.png"
 ---
 
-<Base title="blog" classes="min-h-screen flex flex-col items-center justify-center gap-2">
-    <Image inferSize={true} src={pen} alt="pen" class='max-w-[90vw]' />
-    <div class='text-3xl mb-2'>blog</div>
-    <div class='w-[300px] max-w-[90vw] flex flex-col gap-2'>
-      <button class='rounded-full w-full p-2' onclick="window.location.href='signup'">signup</button>
-      <button class='rounded-full w-full p-2' onclick="window.location.href='login'">login</button>
-      <button class='rounded-full w-full p-2' style="background-color: red;" onclick="window.location.href='about'">about</button>
+<Base title="blog" classes="min-h-screen flex flex-col items-center gap-2">
+    <div class="flex flex-col items-center justify-center grow gap-2">
+        <Image inferSize={true} src={pen} alt="pen" class='max-w-[90vw]' />
+        <div class='text-3xl mb-2'>blog</div>
+        <div class='w-[300px] max-w-[90vw] flex flex-col gap-2'>
+            <button class='rounded-full w-full p-2' onclick="window.location.href='signup'">signup</button>
+            <button class='rounded-full w-full p-2' onclick="window.location.href='login'">login</button>
+            <button class='rounded-full w-full p-2' style="background-color: red;" onclick="window.location.href='about'">about</button>
+        </div>
     </div>
     <script define:vars={{ cookiename }}>
 

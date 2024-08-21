@@ -4,7 +4,7 @@ import { lucia } from "../lib/auth"
 
 const cookiename = lucia.sessionCookieName
 ---
-<header class="fixed top-0 z-30 mx-auto w-full border border-gray-100/20 bg-white/20 py-3 shadow backdrop-blur-lg">
+<header class="sticky top-0 z-30 mx-auto w-full border border-gray-100/20 bg-white/20 py-3 shadow backdrop-blur-lg">
     <div class="px-4">
         <div class="flex items-center justify-between">
             <div class="flex shrink-0">
@@ -15,12 +15,12 @@ const cookiename = lucia.sessionCookieName
             </div>
             <div class="hidden md:flex md:items-center md:justify-center bg-white px-2 py-1 rounded gap-2">
                 <img src="search.svg" class="w-5">               
-                <input type="text" class="bg-white/80 focus:outline-none text-black">
+                <input type="text" placeholder="search" class="bg-white/80 focus:outline-none text-black">
             </div>
             <div class="flex items-center justify-end gap-3">
                 <Theme />
-                <a class="auth hidden items-center justify-center rounded-xl bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition-all duration-150 hover:bg-gray-50 sm:inline-flex" href="/signup">Sign up</a>
-                <a class="auth hidden items-center justify-center rounded-xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-150 hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 sm:inline-flex" href="/login">Login</a>
+                <button class="auth antibutton hidden p-2 rounded text-sm font-semibold sm:block" onclick="window.location.href = '/login'">Login</button>
+                <button class="auth hidden p-2 rounded text-sm font-semibold text-nowrap sm:block" onclick="window.location.href='/signup'">Sign up</button>
             </div>
         </div>
     </div>

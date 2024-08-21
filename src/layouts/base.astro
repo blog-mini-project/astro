@@ -8,9 +8,9 @@ import Nav from "../ui/nav.astro"
 	<title>{title}</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="/tailwind.css" is:inline></script>
-	<link rel="shortcut icon" href="/pen.png" type="image/x-icon">
-	<link rel="stylesheet" href="./css/button.css">
+	<script src="https://blog-mini-project.netlify.app/tailwind.css" is:inline></script>
+	<link rel="shortcut icon" href="https://blog-mini-project.netlify.app/pen.png" type="image/x-icon">
+	<link rel="stylesheet" href="https://blog-mini-project.netlify.app/css/button.css">
   </head>
   <body class={classes} style="background-color: black;">
 		<Nav />
@@ -51,6 +51,14 @@ import Nav from "../ui/nav.astro"
 					button.classList.add(buttonBgColorClass)
 					button.classList.add(buttonbghoverColorClass)
 					button.classList.add(buttonTextColorClass)
+					if (button.classList.contains('antibutton')) {
+						button.classList.remove(buttonBgColorClass)
+						button.classList.remove(buttonbghoverColorClass)
+						button.classList.remove(buttonTextColorClass)
+						button.classList.add(`bg-transparent`)
+						button.classList.add(`hover:bg-transparent`)
+						button.classList.add(`text-${buttonBgColorClass}`)
+					}
 				})
 			}
 
@@ -59,6 +67,11 @@ import Nav from "../ui/nav.astro"
 			setTimeout(() => {
 				localStorage.setItem('theme', original)
 			}, 50)
+
+			const headers = document.querySelectorAll('header')
+			if (headers.length > 1) {
+				headers[1].remove()
+			}
 		</script>
 
   </body>
