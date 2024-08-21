@@ -20,16 +20,3 @@ button {
 button:active {
     animation: pop 0.5s ease-out;
 }
-
-input[type="text"] , input[type="password"], input[type="email"], textarea {
-    width: 100%;
-    border-radius: 50px;
-    border: none;
-    padding: 10px;
-    color: rgb(255, 255, 255);
-    background-color: rgb(35, 35, 35);
-}
-
-textarea {
-  border-radius: 0px;
-}

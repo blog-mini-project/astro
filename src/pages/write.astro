@@ -11,6 +11,8 @@ const cookiename = lucia.sessionCookieName
     <textarea id="content" name="content" placeholder="Content" class='w-full p-2' rows="5" required></textarea>
     <input type="text" id="tags" name="tags" placeholder="Tags (comma separated)" class='w-full p-2'>
     <button type="submit" class='rounded-full w-full p-2 bg-blue-500 text-white'>Submit</button>
+    <p id="hello" contenteditable="true">title</p>
+    <button onclick="alert(document.getElementById('hello').innerText)">haha</button>
 </form>
 <script define:vars={{ cookiename }}>
     var cookies = document.cookie.split(';').reduce((acc, cookie) => {

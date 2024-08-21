@@ -1,0 +1,42 @@
+---
+import Theme from "../components/theme.astro"
+import { lucia } from "../lib/auth"
+
+const cookiename = lucia.sessionCookieName
+---
+<header class="fixed top-0 z-30 mx-auto w-full border border-gray-100/20 bg-white/20 py-3 shadow backdrop-blur-lg">
+    <div class="px-4">
+        <div class="flex items-center justify-between">
+            <div class="flex shrink-0">
+                <a aria-current="page" class="flex items-center gap-2" href="/">
+                    <img class="h-7 w-auto" src="pen.png">
+                    <p class="font-bold">BLOG</p>
+                </a>
+            </div>
+            <div class="hidden md:flex md:items-center md:justify-center bg-white px-2 py-1 rounded gap-2">
+                <img src="search.svg" class="w-5">               
+                <input type="text" class="bg-white/80 focus:outline-none text-black">
+            </div>
+            <div class="flex items-center justify-end gap-3">
+                <Theme />
+                <a class="auth hidden items-center justify-center rounded-xl bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition-all duration-150 hover:bg-gray-50 sm:inline-flex" href="/signup">Sign up</a>
+                <a class="auth hidden items-center justify-center rounded-xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-150 hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 sm:inline-flex" href="/login">Login</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script define:vars={{ cookiename }}>
+    var cookies = document.cookie.split(';').reduce((acc, cookie) => {
+        const [name, value] = cookie.split('=').map(c => c.trim())
+        acc[name] = value
+        return acc
+    }, {})
+
+    var checkifloggedin = cookies[cookiename] ?? null
+    if (checkifloggedin) {
+        document.querySelectorAll('.auth').forEach(auth => {
+            auth.style.display = 'none'
+        })
+    }
+</script>

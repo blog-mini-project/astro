@@ -1,7 +1,7 @@
 ---
 const { title } = Astro.props
 const { classes } = Astro.props
-import Theme from "../components/theme.astro"
+import Nav from "../ui/nav.astro"
 ---
 <html lang="en">
   <head>
@@ -13,7 +13,7 @@ import Theme from "../components/theme.astro"
 	<link rel="stylesheet" href="./css/button.css">
   </head>
   <body class={classes} style="background-color: black;">
-		<Theme />
+		<Nav />
 		
 		<slot />
 
@@ -29,9 +29,9 @@ import Theme from "../components/theme.astro"
 			document.body.style.backgroundColor = ""
 
 			function checkLocalStorage() {
-				var bgcolors = ["black", "white"]
+				var bgcolors = ["[#363636]", "[#CFCBCA]"]
 				var textcolors = ["white", "black"]
-				var buttoncolors = ["white", "black"]
+				var buttoncolors = ["[#CFCBCA]", "[#363636]"]
 				var buttontextcolors = ["black", "white"]
 				const isDarkMode = localStorage.getItem("theme") === "dark"
 				var bgColorClass = isDarkMode ? `bg-${bgcolors[0]}` : `bg-${bgcolors[1]}`
