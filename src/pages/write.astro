@@ -5,7 +5,7 @@ import { lucia } from "../lib/auth"
 const cookiename = lucia.sessionCookieName
 ---
 <Base title="Write a Post" classes="min-h-screen flex flex-col">
-<form id="postForm" class='flex flex-col gap-2 items-center'>
+<form id="postForm" class='flex flex-col gap-2 items-center grow justify-center'>
     <h1 id="title" class='w-fit p-2 text-4xl' contenteditable="true">Title ( change this by clicking on it )</h1>
     <textarea id="content" name="content" class="flex w-[94vw] max-w-[600px] rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-none focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[300px] resize-none" placeholder="Start writing your blog post here..."></textarea>
     <input type="text" id="tags" name="tags" placeholder="Tags (comma separated)" class='w-[94vw] max-w-[600px] p-2 rounded-md border border-input text-sm focus:outline-none focus:ring-none focus-visible:ring-ring focus-visible:ring-offset-2' />
