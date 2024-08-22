@@ -7,7 +7,6 @@ import Base from '../layouts/base.astro'
 ---
 <Base title="Login" classes="min-h-screen flex flex-col items-center">
     <div class="flex flex-col items-center justify-center gap-2 grow">
-
         <h1 class="text-4xl p-3">Login</h1>
         <div class="flex flex-col items-center justify-center gap-2">
             <div class="flex flex-col gap-1">
@@ -18,7 +17,12 @@ import Base from '../layouts/base.astro'
                 <label for="password" class="text-sm">Password:</label>
                 <input type="password" id="password" name="password" required class="bg-white focus:outline-none text-black px-2 py-1 rounded" />
             </div>
-            <button id="loginButton" class="p-2 rounded mt-2">Login</button>
+            <button id="loginButton" class="p-2 rounded mt-2 flex items-center justify-center">
+                <p id="logintext">
+                    Login
+                </p>
+                <div id="spinner" class="spinner hidden"></div>
+            </button>
         </div>
     </div>
     <script define:vars={{ cookiename }}>
@@ -41,6 +45,9 @@ import Base from '../layouts/base.astro'
                 event.preventDefault()
                 const username = document.getElementById("username").value
                 const password = document.getElementById("password").value
+
+                document.getElementById('logintext').classList.add('hidden')
+                document.getElementById('spinner').classList.remove('hidden')
     
                 const response = await fetch('/api/login', {
                     method: 'POST',
@@ -52,13 +59,29 @@ import Base from '../layouts/base.astro'
     
                 const data = await response.json()
                 console.log(data)
-    
+                
                 if (data.success) {
                     document.cookie = `${data.sessionCookie.name}=${data.sessionCookie.value}; ${data.sessionCookie.attributes}`
+                    document.getElementById('logintext').classList.remove('hidden')
+                    document.getElementById('spinner').classList.add('hidden')
                     window.location.href = "/home"
                 } else {
                     alert(data.message)
                 }
             })
     </script>
+    <style>
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </Base>
