@@ -41,6 +41,7 @@ import Nav from "../ui/nav.astro"
 				document.body.classList.add(bgColorClass)
 				document.body.classList.add(textColorClass)
 				var buttonBgColorClass = isDarkMode ? `bg-${buttoncolors[0]}` : `bg-${buttoncolors[1]}`
+				var buttonoutlineColorClass = isDarkMode ? `border-${buttoncolors[0]}` : `border-${buttoncolors[1]}`
 				var buttonbghoverColorClass = isDarkMode ? `hover:bg-${buttoncolors[0]}` : `hover:bg-${buttoncolors[1]}`
 				var buttonTextColorClass = isDarkMode ? `text-${buttontextcolors[0]}` : `text-${buttontextcolors[1]}`
 				var buttons = document.querySelectorAll('button')
@@ -58,6 +59,16 @@ import Nav from "../ui/nav.astro"
 						button.classList.add(`bg-transparent`)
 						button.classList.add(`hover:bg-transparent`)
 						button.classList.add(`text-${buttonBgColorClass}`)
+					}
+					if (button.classList.contains('outlinebutton')) {
+						button.classList.remove(buttonBgColorClass)
+						button.classList.remove(buttonbghoverColorClass)
+						button.classList.remove(buttonTextColorClass)
+						button.classList.add(`text-${buttonBgColorClass}`)
+						button.classList.add(`border-2`)
+						button.classList.add(buttonoutlineColorClass)
+						button.classList.add(`hover:${buttonBgColorClass}`)
+						button.classList.add(`hover:${buttonTextColorClass}`)
 					}
 				})
 			}
