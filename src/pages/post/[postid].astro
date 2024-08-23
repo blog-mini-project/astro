@@ -30,8 +30,13 @@ const cookiename = lucia.sessionCookieName
         <div class="flex items-center gap-4 text-gray-500 mb-4">
             <span>Author: <a href={`/author/${post.user}`} class="text-blue-500 hover:underline">{post.user}</a></span>
             <span>Published: {post.published}</span>
-            <span>Upvotes: {post.upvotes}</span>
-            <span>Downvotes: {post.downvotes}</span>
+            <span class="flex items-center gap-1">
+        <button class="btn">upvotes {post.upvotes}</button>
+        
+    </span>
+    <span class="flex items-center gap-1">
+        <button class="btn">downvote {post.downvotes}</button>
+    </span>
         </div>
         <h2 class="text-2xl font-semibold mb-4">Comments</h2>
         <div id="comments" class="mb-6">

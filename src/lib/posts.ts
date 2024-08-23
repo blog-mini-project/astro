@@ -10,7 +10,7 @@ export async function makePost(title: string, content: string, user: string, tag
         upvotes: 0,
         downvotes: 0,
     })
-    var allpost = await db.select().from(Post).all() 
+    var allpost = await db.select().from(Post).all()
     console.log(allpost)
     return newPost
 }
@@ -36,3 +36,4 @@ export async function getPostsByTag(tag: string) {
         .limit(25)
     return posts
 }
+
