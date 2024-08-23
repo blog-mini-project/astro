@@ -46,8 +46,8 @@ import Base from '../layouts/base.astro'
         const displayname = document.getElementById("signupDisplayName").value
         const profilepicFile = document.getElementById("signupProfilePic").files[0]
 
-        if (!username || !email || !password) {
-          alert("Username, email, and password are required.")
+        if (!username || !email || !password || !displayname) {
+          alert("Username, email, display name and password are required.")
           return
         }
 

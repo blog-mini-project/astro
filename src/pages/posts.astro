@@ -18,8 +18,8 @@ let posts = await getPosts()
                     <div class='text-sm text-gray-500 mb-2'>
                         <p>Author: {post.user}</p>
                         <p>Published: {new Date(post.published).toLocaleString()}</p>
-                        <p>Upvotes: {post.upvotes}</p>
-                        <p>Downvotes: {post.downvotes}</p>
+                        <p>{post.upvotes} upvotes</p>
+                        <p>{post.downvotes} downvotes</p>
                         <p>Tags: {post.tags.join(', ')}</p>
                     </div>
                     <div class='author-details text-sm text-gray-500 mt-2'>

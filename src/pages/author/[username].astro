@@ -1,16 +1,16 @@
 ---
 import { getUser, getUserPosts } from '../../lib/authors'
 const { username } = Astro.params
-var authordetails = await getUser(username)
+const authordetails = await getUser(username)
 const author = authordetails[0]
 console.log(author)
-delete author.password
 const posts = await getUserPosts(username)
 export const prerender = false
 
 import Base from '../../layouts/base.astro'
 ---
-<Base title={author.displayname} classes="min-h-screen flex flex-col items-center justify-start py-10">
+{author ? (
+<Base title={author.displayname} classes="min-h-screen flex flex-col items-center">
     <div class="max-w-3xl w-full bg-white text-black shadow-md rounded-lg p-6">
         <div class="flex items-center gap-4 mb-6">
             <img src={author.profilepic} alt="Profile Picture" class="w-24 h-24 rounded-full object-cover" />
@@ -38,3 +38,6 @@ import Base from '../../layouts/base.astro'
         </ul>
     </div>
 </Base>
+) : (
+    <p>Loading...</p>
+)}
