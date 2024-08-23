@@ -6,9 +6,12 @@ const cookiename = lucia.sessionCookieName
 
 let tags = await getTags()
 ---
-<Base title="Tags" classes="min-h-screen flex flex-col items-center">
-    <div class='text-4xl font-bold mb-6'>Tags</div>
+<Base title="Read" classes="min-h-screen flex flex-col items-center">
+    <div class='text-4xl font-bold mb-6'>Read</div>
     <div id="tags-container" class='w-full max-w-3xl flex flex-col gap-4'>
+        <button class='border rounded-lg p-4 bg-white text-black shadow-md cursor-pointer' onclick="window.location.href='/posts'">
+            show all posts
+        </button>
         {tags.map(tag => (
             <button class='border rounded-lg p-4 bg-white text-black shadow-md cursor-pointer' key={tag.name} data-tag={tag.name}>
                 {tag.name}

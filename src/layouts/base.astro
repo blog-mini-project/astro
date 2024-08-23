@@ -11,6 +11,7 @@ import Nav from "../ui/nav.astro"
 	<script src="https://blog-mini-project.netlify.app/tailwind.css" is:inline></script>
 	<link rel="shortcut icon" href="https://blog-mini-project.netlify.app/pen.png" type="image/x-icon">
 	<link rel="stylesheet" href="https://blog-mini-project.netlify.app/css/button.css">
+	<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
   </head>
   <body class={classes} style="background-color: black;">
 		<Nav />
@@ -79,9 +80,13 @@ import Nav from "../ui/nav.astro"
 				localStorage.setItem('theme', original)
 			}, 50)
 
-			const headers = document.querySelectorAll('header')
+			const headers = document.getElementsByClassName('navbar')
 			if (headers.length > 1) {
-				headers[1].remove()
+				Array.from(headers).forEach((header, index) => {
+					if (index > 0) {
+						header.remove()
+					}
+				})
 			}
 		</script>
 

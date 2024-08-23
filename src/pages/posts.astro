@@ -7,8 +7,8 @@ const cookiename = lucia.sessionCookieName
 
 let posts = await getPosts()
 ---
-<Base title="All Posts" classes="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-    <div class='text-4xl font-bold mb-6'>Posts</div>
+<Base title="All Posts" classes="min-h-screen flex flex-col items-center">
+    <div class='text-4xl font-bold my-6'>Posts</div>
     <div id="posts-container" class='w-full max-w-3xl flex flex-col gap-4'>
         {posts.length > 0 ? (
             posts.map(post => (

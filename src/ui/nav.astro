@@ -4,28 +4,55 @@ import { lucia } from "../lib/auth"
 
 const cookiename = lucia.sessionCookieName
 ---
-<header class="sticky top-0 z-30 mx-auto w-full border border-gray-100/20 bg-white/20 py-3 shadow backdrop-blur-lg">
-    <div class="px-4">
-        <div class="flex items-center justify-between">
-            <div class="flex shrink-0">
-                <a aria-current="page" class="flex items-center gap-2" href="/">
-                    <img class="h-7 w-auto" src="pen.png">
-                    <p class="font-bold">BLOG</p>
-                </a>
-            </div>
-            <div class="hidden md:flex md:items-center md:justify-center bg-white px-2 py-1 rounded gap-2">
-                <img src="search.svg" class="w-5">               
-                <input type="text" placeholder="search" class="bg-white/80 focus:outline-none text-black">
-            </div>
-            <div class="flex items-center justify-end gap-3">
-                <Theme />
-                <button class="auth antibutton hidden p-2 rounded text-sm font-semibold sm:block" onclick="window.location.href = '/login'">Login</button>
-                <button class="auth hidden p-2 rounded text-sm font-semibold text-nowrap sm:block" onclick="window.location.href='/signup'">Sign up</button>
-                <!-- <div class="block sm:hidden">mobile</div> -->
-            </div>
-        </div>
+
+<div class="navbar bg-base-100/20 backdrop-blur-lg sticky top-0 z-30" id="header">
+    <div class="flex-1">
+      <a class="btn btn-ghost text-xl" href="/">
+        <img class="h-7 w-auto" src="pen.png">
+        <p class="font-bold">BLOG</p>
+      </a>
     </div>
-</header>
+    <div class="flex-none gap-2">
+        <div class="btn btn-ghost btn-circle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+        </div>
+      <Theme />
+      <button class="auth antibutton hidden p-2 rounded text-sm font-semibold sm:block" onclick="window.location.href = '/login'">Login</button>
+      <button class="auth hidden p-2 rounded text-sm font-semibold text-nowrap sm:block" onclick="window.location.href='/signup'">Sign up</button>
+      <div class="unauth dropdown dropdown-end" style="display: none;">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+          <div class="w-10 rounded-full">
+            <img
+              alt="profile pic"
+              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+          </div>
+        </div>
+        <ul
+          tabindex="0"
+          class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+          <li>
+            <a class="justify-between" href="profile">
+              Profile
+              <span class="badge">New</span>
+            </a>
+          </li>
+          <li><a href="settings">Settings</a></li>
+          <li><a id="logout">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
 <script define:vars={{ cookiename }}>
     var cookies = document.cookie.split(';').reduce((acc, cookie) => {
@@ -39,5 +66,29 @@ const cookiename = lucia.sessionCookieName
         document.querySelectorAll('.auth').forEach(auth => {
             auth.style.display = 'none'
         })
+        document.querySelectorAll('.unauth').forEach(unauth => {
+            unauth.style.display = 'block'
+        })
     }
+    document.getElementById('logout').addEventListener('click', async () => {
+        document.cookie = `${cookiename}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+        await fetch('/api/logout')
+        alert('logged out')
+        window.location.href = "/login"
+    })        
 </script>
+
+<!-- use this for logout alert -->
+<!-- 
+<dialog id="my_modal_1" class="modal">
+    <div class="modal-box">
+      <h3 class="text-lg font-bold">Hello!</h3>
+      <p class="py-4">Press ESC key or click the button below to close</p>
+      <div class="modal-action">
+        <form method="dialog">
+          if there is a button in form, it will close the modal
+          <button class="btn">Close</button>
+        </form>
+      </div>
+    </div>
+  </dialog> -->

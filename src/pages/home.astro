@@ -15,7 +15,6 @@ const cookiename = lucia.sessionCookieName
         <button class='rounded-full w-full p-2' onclick="window.location.href='/read'">Read</button>
         <button class='rounded-full w-full p-2' onclick="window.location.href='/write'">Write</button>
         <button class='rounded-full w-full p-2' onclick="window.location.href='/leaderboard'">Leaderboard</button>
-        <button class='rounded-full w-full p-2' style="background-color: red;" id="logout">Log out</button>
       </div>
     </div>
     <script define:vars={{ cookiename }}>
@@ -30,13 +29,6 @@ const cookiename = lucia.sessionCookieName
         if (!checkifloggedin) {
             window.location.href = "/login"
         }
-
-        document.getElementById('logout').addEventListener('click', async () => {
-            document.cookie = `${cookiename}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
-            await fetch('/api/logout')
-            alert('logged out')
-            window.location.href = "/login"
-        })        
         
     </script>
 </Base>
