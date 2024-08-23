@@ -1,8 +1,9 @@
 ---
 import { getUser, getUserPosts } from '../../lib/authors'
 const { username } = Astro.params
-var author = await getUser(username)
-author = author[0]
+var authordetails = await getUser(username)
+const author = authordetails[0]
+console.log(author)
 delete author.password
 const posts = await getUserPosts(username)
 export const prerender = false

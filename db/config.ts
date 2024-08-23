@@ -21,6 +21,7 @@ export const User = defineTable({
 export const Post = defineTable({
     columns: {
         id: column.number({ primaryKey: true }),
+        img: column.text({ optional: true }),
         title: column.text(),
         content: column.text(),
         published: column.date({ default: NOW }),

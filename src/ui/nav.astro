@@ -35,7 +35,7 @@ const cookiename = lucia.sessionCookieName
           <div class="w-10 rounded-full">
             <img
               alt="profile pic"
-              src="" id="pfp"/>
+              src="https://cdn-icons-png.flaticon.com/512/149/149071.png" id="pfp"/>
           </div>
         </div>
         <ul
@@ -72,9 +72,9 @@ const cookiename = lucia.sessionCookieName
         fetch('/api/user/details')
             .then(response => response.json())
             .then(data => {
-                if (data.pfp == null) {
+                if (data.profilepic == "") {
                  // default profile pic 
-                 data.pfp = 'https://cdn-icons-png.flaticon.com/512/149/149071.png'
+                 data.profilepic = 'https://cdn-icons-png.flaticon.com/512/149/149071.png'
                 }
                 document.getElementById('pfp').src = data.profilepic
             })
