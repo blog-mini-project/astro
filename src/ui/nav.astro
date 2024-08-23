@@ -35,14 +35,14 @@ const cookiename = lucia.sessionCookieName
           <div class="w-10 rounded-full">
             <img
               alt="profile pic"
-              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+              src="" id="pfp"/>
           </div>
         </div>
         <ul
           tabindex="0"
           class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
           <li>
-            <a class="justify-between" href="profile">
+            <a class="justify-between" href="author/me/me">
               Profile
               <span class="badge">New</span>
             </a>
@@ -69,6 +69,15 @@ const cookiename = lucia.sessionCookieName
         document.querySelectorAll('.unauth').forEach(unauth => {
             unauth.style.display = 'block'
         })
+        fetch('/api/user/details')
+            .then(response => response.json())
+            .then(data => {
+                if (data.pfp == null) {
+                 // default profile pic 
+                 data.pfp = 'https://cdn-icons-png.flaticon.com/512/149/149071.png'
+                }
+                document.getElementById('pfp').src = data.profilepic
+            })
     }
     document.getElementById('logout').addEventListener('click', async () => {
         document.cookie = `${cookiename}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
